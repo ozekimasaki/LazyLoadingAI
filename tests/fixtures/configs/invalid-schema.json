@@ -1,0 +1,12 @@
+{
+  "directories": "not-an-array",
+  "output": {
+    "database": 12345
+  },
+  "include": "also-not-an-array",
+  "languages": {
+    "python": {
+      "docstringFormat": "invalid-format"
+    }
+  }
+}

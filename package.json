@@ -1,0 +1,77 @@
+{
+  "name": "lazyloadingai",
+  "version": "1.0.0",
+  "description": "MCP server for lazy-loading code context - provides lightweight manifests of function/class signatures for AI assistants",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "lazy-load": "dist/cli/index.js",
+    "lazyloadingai": "dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/cli/index.js",
+    "serve": "node dist/cli/index.js serve",
+    "test": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "vitest run tests/e2e",
+    "lint": "eslint src --ext .ts",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build",
+    "benchmark": "npx ts-node benchmarks/token-comparison.ts",
+    "benchmark:src": "npx ts-node benchmarks/token-comparison.ts -- --src",
+    "benchmark:validate": "node --experimental-strip-types benchmarks/validation-benchmark.ts",
+    "benchmark:validate:quick": "node --experimental-strip-types benchmarks/validation-benchmark.ts --tasks 1,4",
+    "benchmark:validate:without-natural": "node --experimental-strip-types benchmarks/validation-benchmark.ts --without-vs-natural",
+    "benchmark:validate:installed": "node --experimental-strip-types benchmarks/validation-benchmark.ts --without-vs-installed",
+    "benchmark:validate:test": "node --experimental-strip-types benchmarks/validation-benchmark-test.ts",
+    "benchmark:validate:test:quick": "node --experimental-strip-types benchmarks/validation-benchmark-test.ts --dry-run",
+    "benchmark:validate:test:installed": "node --experimental-strip-types benchmarks/validation-benchmark-test.ts --without-vs-installed",
+    "benchmark:validate:session": "node --experimental-strip-types benchmarks/validation-benchmark.ts --session-only --session-queries 5"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "code-indexing",
+    "lazy-loading",
+    "claude",
+    "typescript",
+    "python"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@iarna/toml": "^2.2.5",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "better-sqlite3": "^11.0.0",
+    "chokidar": "^4.0.0",
+    "commander": "^12.0.0",
+    "fast-glob": "^3.3.0",
+    "fuse.js": "^7.0.0",
+    "tree-sitter": "^0.22.4",
+    "tree-sitter-python": "^0.23.6",
+    "ts-morph": "^24.0.0",
+    "yaml": "^2.8.2",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@anthropic-ai/claude-code": "^1.0.128",
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^22.0.0",
+    "@types/yaml": "^1.9.6",
+    "@vitest/coverage-v8": "^2.1.9",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ]
+}

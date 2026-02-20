@@ -1,0 +1,33 @@
+{
+  "directories": ["./src"],
+  "output": {
+    "database": ".lazyload/index.db"
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.py"
+  ],
+  "exclude": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.git/**",
+    "**/venv/**",
+    "**/__pycache__/**",
+    "**/coverage/**"
+  ],
+  "languages": {
+    "typescript": {
+      "extractDocumentation": true,
+      "includePrivate": false
+    },
+    "python": {
+      "extractDocumentation": true,
+      "includePrivate": false,
+      "docstringFormat": "auto"
+    }
+  }
+}
