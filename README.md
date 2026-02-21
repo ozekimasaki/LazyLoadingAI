@@ -1,6 +1,7 @@
 # LazyLoadingAI
 
 **Smart code context for AI assistants — fetch exactly what you need, nothing more.**
+[Japanese README](./README.ja.md)
 
 [![npm](https://img.shields.io/npm/v/lazyloadingai)](https://www.npmjs.com/package/lazyloadingai)
 [![license](https://img.shields.io/npm/l/lazyloadingai)](LICENSE)
@@ -169,3 +170,4 @@ Requirements: Node.js ≥ 18
 ## License
 
 MIT
+
