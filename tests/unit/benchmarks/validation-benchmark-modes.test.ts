@@ -61,8 +61,19 @@ describe("validation benchmark --modes validation", () => {
     );
   });
 
-  it("accepts without,installed mode parsing", () => {
+  it.skipIf(
+    !fs.existsSync(
+      path.join(
+        path.resolve(__dirname, "../../../"),
+        "benchmarks/results/validation-2026-02-15.json",
+      ),
+    ),
+  )("accepts without,installed mode parsing", () => {
     const repoRoot = path.resolve(__dirname, "../../../");
+    const inputPath = path.join(
+      repoRoot,
+      "benchmarks/results/validation-2026-02-15.json",
+    );
     const outputPath = path.join(
       os.tmpdir(),
       `validation-modes-installed-${Date.now()}.json`,
@@ -78,7 +89,7 @@ describe("validation benchmark --modes validation", () => {
           "without,installed",
           "--dry-run",
           "--rescore",
-          "benchmarks/results/validation-2026-02-15.json",
+          inputPath,
           "--output",
           outputPath,
         ],

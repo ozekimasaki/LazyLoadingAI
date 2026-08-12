@@ -68,17 +68,19 @@ export const markovConfigSchema = z.object({
   defaultDepth: z.number().min(1).max(5).default(2),
   defaultDecayFactor: z.number().min(0).max(1).default(0.7),
   minProbability: z.number().min(0).max(1).default(0.05),
+  // Zod 4: use prefault so nested field defaults are still applied
   chainWeights: z.object({
     call_flow: z.number().default(0.4),
     cooccurrence: z.number().default(0.25),
     type_affinity: z.number().default(0.2),
     import_cluster: z.number().default(0.15),
-  }).default({}),
+  }).prefault({}),
 });
 
 export const configSchema = z.object({
   directories: z.array(z.string()).default(['.']),
-  output: outputConfigSchema.default({}),
+  // Zod 4: prefault parses the empty object so nested defaults apply
+  output: outputConfigSchema.prefault({}),
   include: z.array(z.string()).default([
     '**/*.ts',
     '**/*.tsx',
@@ -97,10 +99,10 @@ export const configSchema = z.object({
     '**/.next/**',
     '**/.nuxt/**',
   ]),
-  languages: languagesConfigSchema.default({}),
-  synonyms: synonymsConfigSchema.default({}),
-  markov: markovConfigSchema.default({}),
-  parser: parserConfigSchema.default({}),
+  languages: languagesConfigSchema.prefault({}),
+  synonyms: synonymsConfigSchema.prefault({}),
+  markov: markovConfigSchema.prefault({}),
+  parser: parserConfigSchema.prefault({}),
 });
 
 export type Config = z.infer<typeof configSchema>;

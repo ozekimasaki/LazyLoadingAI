@@ -56,7 +56,7 @@ describe('CLI serve command', () => {
     it('initializes indexer with correct database path', async () => {
       const { serveCommand } = await import('../../../src/cli/commands/serve.js');
 
-      await serveCommand.parseAsync(['node', 'serve', '-d', '/custom/path.db'], { from: 'user' });
+      await serveCommand.parseAsync(['node', 'serve', '-d', '/custom/path.db']);
 
       // Should have started server if no error
       expect(mockServerStarted || mockShouldError).toBe(true);
@@ -67,7 +67,7 @@ describe('CLI serve command', () => {
 
       const { serveCommand } = await import('../../../src/cli/commands/serve.js');
 
-      await serveCommand.parseAsync(['node', 'serve'], { from: 'user' });
+      await serveCommand.parseAsync(['node', 'serve']);
 
       // Should initialize without error
       expect(exitSpy).not.toHaveBeenCalled();
@@ -78,7 +78,7 @@ describe('CLI serve command', () => {
 
       const { serveCommand } = await import('../../../src/cli/commands/serve.js');
 
-      await serveCommand.parseAsync(['node', 'serve'], { from: 'user' });
+      await serveCommand.parseAsync(['node', 'serve']);
 
       // Should initialize without error
       expect(exitSpy).not.toHaveBeenCalled();
@@ -91,7 +91,7 @@ describe('CLI serve command', () => {
 
       const { serveCommand } = await import('../../../src/cli/commands/serve.js');
 
-      await serveCommand.parseAsync(['node', 'serve'], { from: 'user' });
+      await serveCommand.parseAsync(['node', 'serve']);
 
       const errorOutput = errorSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(errorOutput).toContain('Error');
@@ -105,7 +105,7 @@ describe('CLI serve command', () => {
 
       // Should not throw when parsing with database option
       await expect(
-        serveCommand.parseAsync(['node', 'serve', '--database', '/path/to/db'], { from: 'user' })
+        serveCommand.parseAsync(['node', 'serve', '--database', '/path/to/db'])
       ).resolves.not.toThrow();
     });
 
@@ -114,7 +114,7 @@ describe('CLI serve command', () => {
 
       // Should not throw when parsing with root option
       await expect(
-        serveCommand.parseAsync(['node', 'serve', '--root', '/path/to/root'], { from: 'user' })
+        serveCommand.parseAsync(['node', 'serve', '--root', '/path/to/root'])
       ).resolves.not.toThrow();
     });
   });
