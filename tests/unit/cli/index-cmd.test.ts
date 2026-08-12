@@ -81,7 +81,7 @@ describe('CLI index command', () => {
     it('shows completion message', async () => {
       const { indexCommand } = await import('../../../src/cli/commands/index-cmd.js');
 
-      await indexCommand.parseAsync(['node', 'index', '.'], { from: 'user' });
+      await indexCommand.parseAsync(['node', 'index', '.']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(output).toContain('Indexing complete');
@@ -90,7 +90,7 @@ describe('CLI index command', () => {
     it('shows file count and duration', async () => {
       const { indexCommand } = await import('../../../src/cli/commands/index-cmd.js');
 
-      await indexCommand.parseAsync(['node', 'index', '.'], { from: 'user' });
+      await indexCommand.parseAsync(['node', 'index', '.']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(output).toContain('Total files:');
@@ -102,7 +102,7 @@ describe('CLI index command', () => {
     it('shows stats after indexing', async () => {
       const { indexCommand } = await import('../../../src/cli/commands/index-cmd.js');
 
-      await indexCommand.parseAsync(['node', 'index', '.'], { from: 'user' });
+      await indexCommand.parseAsync(['node', 'index', '.']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(output).toContain('Index statistics');
@@ -121,7 +121,7 @@ describe('CLI index command', () => {
 
       const { indexCommand } = await import('../../../src/cli/commands/index-cmd.js');
 
-      await indexCommand.parseAsync(['node', 'index', '.', '--verbose'], { from: 'user' });
+      await indexCommand.parseAsync(['node', 'index', '.', '--verbose']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(output).toContain('Errors:');
@@ -135,7 +135,7 @@ describe('CLI index command', () => {
 
       const { indexCommand } = await import('../../../src/cli/commands/index-cmd.js');
 
-      await indexCommand.parseAsync(['node', 'index', '.'], { from: 'user' });
+      await indexCommand.parseAsync(['node', 'index', '.']);
 
       const errorOutput = errorSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(errorOutput).toContain('Error');
@@ -147,7 +147,7 @@ describe('CLI index command', () => {
     it('accepts custom output path option', async () => {
       const { indexCommand } = await import('../../../src/cli/commands/index-cmd.js');
 
-      await indexCommand.parseAsync(['node', 'index', '.', '-o', 'custom/path.db'], { from: 'user' });
+      await indexCommand.parseAsync(['node', 'index', '.', '-o', 'custom/path.db']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(output).toContain('Database:');

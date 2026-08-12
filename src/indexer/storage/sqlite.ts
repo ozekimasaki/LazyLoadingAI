@@ -64,6 +64,7 @@ export class SqliteStorage implements StorageInterface {
   private fuse: Fuse<SymbolRow> | null = null;
   private symbolCache: SymbolRow[] = [];
   private cacheValid = false;
+  private fuseFilterKey = '';
 
   constructor(dbPath: string) {
     this.dbPath = dbPath;
@@ -1047,6 +1048,13 @@ export class SqliteStorage implements StorageInterface {
 
     const limit = options?.limit ?? 50;
     const offset = options?.offset ?? 0;
+    const trimmedQuery = query.trim();
+
+    // Empty query means "list/filter symbols" — Fuse.js 7.3+ returns all items for "",
+    // and SQLite FTS5 rejects a bare "*". Use SQL filtering instead.
+    if (!trimmedQuery) {
+      return this.listFilteredSymbols(options);
+    }
 
     // First try FTS search
     let ftsQuery = `
@@ -1057,8 +1065,8 @@ export class SqliteStorage implements StorageInterface {
     `;
 
     // Check if query already has FTS operators (OR, *, etc.) - if so, use as-is
-    const hasFtsOperators = /\s+OR\s+/i.test(query) || query.includes('*') || query.includes('"');
-    const ftsSearchQuery = hasFtsOperators ? query : query + '*';
+    const hasFtsOperators = /\s+OR\s+/i.test(trimmedQuery) || trimmedQuery.includes('*') || trimmedQuery.includes('"');
+    const ftsSearchQuery = hasFtsOperators ? trimmedQuery : trimmedQuery + '*';
     const ftsParams: (string | number)[] = [ftsSearchQuery];
 
     if (options?.type && options.type !== 'all') {
@@ -1108,14 +1116,63 @@ export class SqliteStorage implements StorageInterface {
     }
 
     // Fall back to Fuse.js fuzzy search
-    return this.fuzzySearch(query, options);
+    return this.fuzzySearch(trimmedQuery, options);
+  }
+
+  private listFilteredSymbols(options?: QueryOptions): SearchResult[] {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const limit = options?.limit ?? 50;
+    const offset = options?.offset ?? 0;
+    let sql = 'SELECT id, name, kind, signature, file_path, line_start FROM symbols WHERE 1=1';
+    const params: (string | number)[] = [];
+
+    if (options?.type && options.type !== 'all') {
+      if (options.type === 'function') {
+        sql += ` AND kind IN ('function', 'method', 'constructor', 'callback')`;
+      } else {
+        sql += ` AND kind = ?`;
+        params.push(options.type);
+      }
+    }
+
+    if (options?.language) {
+      sql += ` AND language = ?`;
+      params.push(options.language);
+    }
+
+    sql += ` ORDER BY name LIMIT ? OFFSET ?`;
+    params.push(limit, offset);
+
+    const rows = this.db.prepare(sql).all(...params) as Array<{
+      id: string;
+      name: string;
+      kind: string;
+      signature: string;
+      file_path: string;
+      line_start: number;
+    }>;
+
+    return rows.map(row => ({
+      symbol: {
+        id: row.id,
+        name: row.name,
+        kind: row.kind,
+        signature: row.signature,
+        filePath: row.file_path,
+        line: row.line_start,
+      },
+      score: 1,
+      matches: [],
+    }));
   }
 
   private async fuzzySearch(query: string, options?: QueryOptions): Promise<SearchResult[]> {
     if (!this.db) throw new Error('Database not initialized');
 
-    // Rebuild cache if needed
-    if (!this.cacheValid || this.symbolCache.length === 0) {
+    // Rebuild cache when invalidated or when filter options change
+    const cacheKey = `${options?.type ?? 'all'}::${options?.language ?? 'all'}`;
+    if (!this.cacheValid || this.symbolCache.length === 0 || this.fuseFilterKey !== cacheKey) {
       let sql = 'SELECT * FROM symbols WHERE 1=1';
       const params: (string | number)[] = [];
 
@@ -1141,6 +1198,7 @@ export class SqliteStorage implements StorageInterface {
         includeMatches: true,
       });
       this.cacheValid = true;
+      this.fuseFilterKey = cacheKey;
     }
 
     if (!this.fuse) return [];

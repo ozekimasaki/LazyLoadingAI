@@ -46,7 +46,7 @@ describe('CLI query command', () => {
       }));
 
       const { queryCommand } = await import('../../../src/cli/commands/query.js');
-      await queryCommand.parseAsync(['node', 'query', 'greet', '--json'], { from: 'user' });
+      await queryCommand.parseAsync(['node', 'query', 'greet', '--json']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(() => JSON.parse(output)).not.toThrow();
@@ -68,7 +68,7 @@ describe('CLI query command', () => {
       }));
 
       const { queryCommand } = await import('../../../src/cli/commands/query.js');
-      await queryCommand.parseAsync(['node', 'query', 'nonexistent'], { from: 'user' });
+      await queryCommand.parseAsync(['node', 'query', 'nonexistent']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(output).toContain('No symbols found matching');
@@ -102,7 +102,7 @@ describe('CLI query command', () => {
       }));
 
       const { queryCommand } = await import('../../../src/cli/commands/query.js');
-      await queryCommand.parseAsync(['node', 'query', 'greet'], { from: 'user' });
+      await queryCommand.parseAsync(['node', 'query', 'greet']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(output).toContain('Found');
@@ -127,7 +127,7 @@ describe('CLI query command', () => {
       }));
 
       const { queryCommand } = await import('../../../src/cli/commands/query.js');
-      await queryCommand.parseAsync(['node', 'query', 'test'], { from: 'user' });
+      await queryCommand.parseAsync(['node', 'query', 'test']);
 
       const errorOutput = errorSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(errorOutput).toContain('Error');

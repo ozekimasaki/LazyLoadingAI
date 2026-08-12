@@ -92,7 +92,7 @@ describe('CLI watch command', () => {
       const { watchCommand } = await import('../../../src/cli/commands/watch.js');
 
       // Start parsing but don't wait forever
-      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.'], { from: 'user' });
+      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.']);
 
       // Wait a bit for initial indexing
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -106,7 +106,7 @@ describe('CLI watch command', () => {
     it('creates watcher with correct patterns', async () => {
       const { watchCommand } = await import('../../../src/cli/commands/watch.js');
 
-      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.'], { from: 'user' });
+      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.']);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -120,7 +120,7 @@ describe('CLI watch command', () => {
     it('registers event handlers for indexed, removed, error, ready', async () => {
       const { watchCommand } = await import('../../../src/cli/commands/watch.js');
 
-      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.'], { from: 'user' });
+      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.']);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -136,7 +136,7 @@ describe('CLI watch command', () => {
     it('handles indexed event', async () => {
       const { watchCommand } = await import('../../../src/cli/commands/watch.js');
 
-      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.', '--verbose'], { from: 'user' });
+      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.', '--verbose']);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -152,7 +152,7 @@ describe('CLI watch command', () => {
     it('handles removed event', async () => {
       const { watchCommand } = await import('../../../src/cli/commands/watch.js');
 
-      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.'], { from: 'user' });
+      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.']);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -168,7 +168,7 @@ describe('CLI watch command', () => {
     it('handles error event', async () => {
       const { watchCommand } = await import('../../../src/cli/commands/watch.js');
 
-      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.'], { from: 'user' });
+      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.']);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -186,7 +186,7 @@ describe('CLI watch command', () => {
     it('registers shutdown handlers for SIGINT and SIGTERM', async () => {
       const { watchCommand } = await import('../../../src/cli/commands/watch.js');
 
-      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.'], { from: 'user' });
+      const parsePromise = watchCommand.parseAsync(['node', 'watch', '.']);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -203,7 +203,7 @@ describe('CLI watch command', () => {
 
       const { watchCommand } = await import('../../../src/cli/commands/watch.js');
 
-      await watchCommand.parseAsync(['node', 'watch', '.'], { from: 'user' });
+      await watchCommand.parseAsync(['node', 'watch', '.']);
 
       const errorOutput = errorSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(errorOutput).toContain('Error');

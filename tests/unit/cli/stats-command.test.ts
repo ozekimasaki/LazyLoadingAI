@@ -28,7 +28,7 @@ describe('CLI stats command', () => {
       vi.spyOn(fs, 'existsSync').mockReturnValue(false);
 
       const { statsCommand } = await import('../../../src/cli/commands/stats.js');
-      await statsCommand.parseAsync(['node', 'stats'], { from: 'user' });
+      await statsCommand.parseAsync(['node', 'stats']);
 
       const printed = errorSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(printed).toMatch(/Database not found/i);
@@ -62,7 +62,7 @@ describe('CLI stats command', () => {
       }));
 
       const { statsCommand } = await import('../../../src/cli/commands/stats.js');
-      await statsCommand.parseAsync(['node', 'stats', '--json'], { from: 'user' });
+      await statsCommand.parseAsync(['node', 'stats', '--json']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(() => JSON.parse(output)).not.toThrow();
@@ -100,7 +100,7 @@ describe('CLI stats command', () => {
       }));
 
       const { statsCommand } = await import('../../../src/cli/commands/stats.js');
-      await statsCommand.parseAsync(['node', 'stats'], { from: 'user' });
+      await statsCommand.parseAsync(['node', 'stats']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(output).toContain('Index Statistics');
@@ -135,7 +135,7 @@ describe('CLI stats command', () => {
       }));
 
       const { statsCommand } = await import('../../../src/cli/commands/stats.js');
-      await statsCommand.parseAsync(['node', 'stats'], { from: 'user' });
+      await statsCommand.parseAsync(['node', 'stats']);
 
       const output = logSpy.mock.calls.map(c => String(c[0])).join('\n');
       expect(output).toContain('Database Size:');
