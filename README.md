@@ -147,6 +147,23 @@ lazyloadingai watch
 
 ---
 
+## CLI
+
+The `lazyloadingai` (alias `lazy-load`) binary exposes these commands:
+
+| Command | Description | Key options |
+|---------|-------------|-------------|
+| `init` | Interactive setup wizard: writes client configs, `CLAUDE.md`/`AGENTS.md`, `lazyload.config.json`, and runs the first index | `--claude`, `--codex`, `--cursor`, `--all`, `--skip-index`, `-d, --directories <dirs...>`, `-y, --yes` |
+| `index [directory]` | Index a codebase into the SQLite database (defaults to `.`) | `-c, --config <path>`, `-o, --output <path>`, `--include <patterns...>`, `--exclude <patterns...>`, `--verbose` |
+| `serve` | Start the MCP server over stdio | `-d, --database <path>`, `-r, --root <path>` |
+| `query <pattern>` | Fuzzy-search the index from the terminal | `-d, --database <path>`, `-t, --type <type>`, `-l, --language <lang>`, `-n, --limit <number>`, `--json` |
+| `watch [directory]` | Index once, then re-index on file changes | `-c, --config <path>`, `-d, --database <path>`, `--verbose` |
+| `stats` | Print index statistics (files, symbols, size) | `-d, --database <path>`, `--json` |
+
+The `serve` command also reads `LAZYLOAD_DATABASE` and `LAZYLOAD_ROOT` environment variables when the corresponding flags are omitted.
+
+---
+
 ## Development
 
 ```bash
@@ -154,9 +171,10 @@ lazyloadingai watch
 npm run build
 
 # Run tests
-npm test
+npm test                  # watch mode
 npm run test:unit
 npm run test:integration
+npm run test:e2e
 
 # Benchmarks
 npm run benchmark:validate           # full 15-run validation (without vs installed)
@@ -164,6 +182,25 @@ npm run benchmark:validate:quick     # quick 2-task smoke test
 ```
 
 Requirements: Node.js ≥ 18
+
+### Project structure
+
+```
+src/
+  cli/           # commander-based CLI (init, index, serve, query, watch, stats)
+  config/        # zod config schema + loader
+  indexer/       # parsers (ts-morph, tree-sitter), storage (SQLite), watcher
+  markov/        # Markov-chain relationship modeling for suggest_related
+  server/        # MCP server and the 13 tool implementations
+  synonyms/      # synonym expansion for symbol search
+  templates/     # generated CLAUDE.md / AGENTS.md content
+  types/         # shared type definitions
+  index.ts       # library entry point (public API exports)
+tests/           # vitest unit, integration, and e2e suites
+benchmarks/      # token/validation benchmarks
+```
+
+See [AGENTS.md](./AGENTS.md) for contributor and AI-agent guidelines.
 
 ---
 
